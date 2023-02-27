@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: steno_tape
+Description: A library of helpers for steno tape output
+URL: https://github.com/paulfioravanti/steno_tape
+Version: 0.0.1
+Libs: -L${libdir} -lsteno_tape
+Cflags: -I${includedir}/steno_tape
