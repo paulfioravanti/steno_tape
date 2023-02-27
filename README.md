@@ -8,7 +8,7 @@ This repo contains libraries and helper code that I use to customise my
 ### Clone repository
 
 In your terminal program, use [Git][] to clone the repository from its home on
-[Github][]:
+[GitHub][]:
 
 ```sh
 git clone git@github.com:paulfioravanti/steno_tape.git
