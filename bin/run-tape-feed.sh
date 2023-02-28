@@ -4,6 +4,7 @@ readonly TAPE_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
 readonly SHELL_COMMAND_PATTERN="{:COMMAND:SHELL:bash -ci 'osascript \\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)(.*)'}(.*)\$"
 readonly SHELL_COMMAND_REPLACEMENT="{:COMMAND: \2\3}\4"
 readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
+readonly GOOGLE_CONSOLE_PATTERN="/links\?resource_id[^\"]+"
 
 main() {
   local filter=false
@@ -45,7 +46,8 @@ run_filtered_tape_feed() {
   # their buffers otherwise no log gets output.
   tail --lines=500 -f "$TAPE_FILE" |
     sed -u -E "s#$SHELL_COMMAND_PATTERN#$SHELL_COMMAND_REPLACEMENT#" |
-    sed -u -E "s#$URL_SCHEME_PATTERN##"
+    sed -u -E "s#$URL_SCHEME_PATTERN##" |
+    sed -u -E "s#$GOOGLE_CONSOLE_PATTERN##"
 }
 
 run_tape_feed() {
