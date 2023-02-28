@@ -3,6 +3,7 @@
 readonly TAPE_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
 readonly SHELL_COMMAND_PATTERN="{:COMMAND:SHELL:bash -ci 'osascript \\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)(.*)'}(.*)\$"
 readonly SHELL_COMMAND_REPLACEMENT="{:COMMAND: \2\3}\4"
+readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
 
 main() {
   local filter=false
@@ -40,8 +41,11 @@ parse_args() {
 }
 
 run_filtered_tape_feed() {
+  # NOTE: Unbuffered flag (-u) needed for all `sed` commands to force flush
+  # their buffers otherwise no log gets output.
   tail --lines=500 -f "$TAPE_FILE" |
-    sed -E "s#$SHELL_COMMAND_PATTERN#$SHELL_COMMAND_REPLACEMENT#"
+    sed -u -E "s#$SHELL_COMMAND_PATTERN#$SHELL_COMMAND_REPLACEMENT#" |
+    sed -u -E "s#$URL_SCHEME_PATTERN##"
 }
 
 run_tape_feed() {
