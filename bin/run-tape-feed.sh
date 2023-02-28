@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly LOG_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
+readonly TAPE_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
 readonly SHELL_COMMAND_PATTERN="{:COMMAND:SHELL:bash -ci 'osascript \\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)(.*)'}(.*)\$"
 readonly SHELL_COMMAND_REPLACEMENT="{:COMMAND: \2\3}\4"
 
@@ -40,12 +40,12 @@ parse_args() {
 }
 
 run_filtered_tape_feed() {
-  tail --lines=500 -f "$LOG_FILE" |
+  tail --lines=500 -f "$TAPE_FILE" |
     sed -E "s#$SHELL_COMMAND_PATTERN#$SHELL_COMMAND_REPLACEMENT#"
 }
 
 run_tape_feed() {
-  less +F "$LOG_FILE"
+  less +F "$TAPE_FILE"
 }
 
 main "$@"

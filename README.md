@@ -50,6 +50,27 @@ In your C code header file, add the following:
 #include <steno_tape.h>
 ```
 
+## Custom Tape Entry Script
+
+This serves a similar purpose as the `steno_tape` library (adding custom,
+non-standard tape entries), but just outside of a C environment. I currently use
+this with [Alfred workflows][], where I want to output chords done in
+QWERTY mode (aka [combos][]) to the tape.
+
+### Usage
+
+The shell script can be run as follows:
+
+```sh
+./bin/custom-tape-entry.sh <ENTRY_NAME>
+```
+
+See the script itself for what named entries are currently supported.
+
+This is how I run the script in the [Alfred][] workflow:
+
+![Alfred workflow][Alfred workflow image url]
+
 ## Tape Filter Script
 
 ### The Problem
@@ -89,7 +110,7 @@ The `run-tape-feed.sh` script aims to perform this filtering.
 
 ### Usage
 
-Since it is just a shell script, it can be run as you expect:
+The shell script can be run as follows:
 
 ```sh
 ./bin/run-tape-feed.sh
@@ -101,13 +122,17 @@ I want one:
 
 ![iTerm2 Tapey Tape profile][iTerm2 Tapey Tape profile image url]
 
+[Alfred]: https://www.alfredapp.com/
+[Alfred workflows]: https://github.com/paulfioravanti/dotfiles/tree/master/macos/alfred
 [C]: https://en.wikipedia.org/wiki/C_(programming_language)
+[combos]: https://github.com/qmk/qmk_firmware/blob/master/docs/feature_combo.md
 [commands]: https://github.com/paulfioravanti/steno-dictionaries/blob/main/dictionaries/command.md
 [Git]: https://git-scm.com/
 [GitHub]: https://github.com/
 [HIDAPI]: https://github.com/libusb/hidapi
 [iTerm2]: https://iterm2.com/
 [iTerm2 Tapey Tape profile image url]: ./assets/iterm2-tape-config.jpg
+[Alfred workflow image url]: ./assets/custom-tape-entries.jpg
 [my HID host]: https://github.com/paulfioravanti/hid_hosts
 [my steno dictionaries]: https://github.com/paulfioravanti/steno-dictionaries
 [Plover]: https://github.com/openstenoproject/plover/
