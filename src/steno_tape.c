@@ -49,6 +49,16 @@ void steno_tape_mode_unchanged(Tape *tape) {
 }
 
 void steno_tape_custom_entry(Tape *tape, const char *entry) {
+  if (strcmp(entry, "GAMING_MODE") == 0) {
+    steno_tape_gaming_mode(tape);
+    return;
+  }
+
+  if (strcmp(entry, "STENO_MODE") == 0) {
+    steno_tape_steno_mode(tape);
+    return;
+  }
+
   for (int i = 0; i < NUM_CUSTOM_ACTIONS; i++) {
     if (strcmp(entry, CUSTOM_ACTIONS[i]) == 0) {
       log_tape_entry(tape, CUSTOM_ACTION_TAPE_ENTRIES[i]);
