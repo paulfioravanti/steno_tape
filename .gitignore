@@ -2,3 +2,4 @@
 *.o
 *.pc
 .DS_Store
+custom_tape_entry

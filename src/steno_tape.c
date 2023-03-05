@@ -48,6 +48,17 @@ void steno_tape_mode_unchanged(Tape *tape) {
   steno_tape_error(tape, MODE_UNCHANGED_MESSAGE);
 }
 
+void steno_tape_custom_entry(Tape *tape, const char *entry) {
+  for (int i = 0; i < NUM_CUSTOM_ACTIONS; i++) {
+    if (strcmp(entry, CUSTOM_ACTIONS[i]) == 0) {
+      log_tape_entry(tape, CUSTOM_ACTION_TAPE_ENTRIES[i]);
+      return;
+    }
+  }
+
+  printf("Unknown entry: %s\n", entry);
+}
+
 void steno_tape_cleanup(Tape *tape) {
   fclose(tape->file);
   free(tape->filepath);
@@ -63,7 +74,7 @@ static void log_message(
 ) {
   const char *emoji = get_random_collection_element(collection, num_elements);
   const char *tape_entry = build_tape_entry(header, emoji, message);
-  fwrite(tape_entry, 1, strlen(tape_entry), tape->file);
+  log_tape_entry(tape, tape_entry);
 }
 
 static const char* get_random_collection_element(
@@ -91,4 +102,8 @@ static char* build_tape_entry(
     message
   );
   return log_msg;
+}
+
+static void log_tape_entry(Tape *tape, const char *tape_entry) {
+  fwrite(tape_entry, 1, strlen(tape_entry), tape->file);
 }

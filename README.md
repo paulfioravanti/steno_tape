@@ -50,24 +50,32 @@ In your C code header file, add the following:
 #include <steno_tape.h>
 ```
 
-## Custom Tape Entry Script
+## Custom Tape Entry Client
 
-This serves a similar purpose as the `steno_tape` library (adding custom,
-non-standard tape entries), but just outside of a C environment. I currently use
-this with [Alfred workflows][], where I want to output chords done in
-QWERTY mode (aka [combos][]) to the tape.
+This is just a small client that uses the `steno_tape` library to turn string
+parameters into custom tape entries. I currently use this with
+[Alfred workflows][], where I want to output chords done in QWERTY mode
+(aka [combos][]) to the tape.
 
 ### Usage
 
-The shell script can be run as follows:
+The client can be run as follows:
+
+#### Build
 
 ```sh
-./bin/custom-tape-entry.sh <ENTRY_NAME>
+./clients/build.sh
 ```
 
-See the script itself for what named entries are currently supported.
+#### Run
 
-This is how I run the script in the [Alfred][] workflow:
+```sh
+./clients/custom_tape_entry <ENTRY_NAME>
+```
+
+See the client code itself for what named entries are currently supported.
+
+This is how I run the program in the [Alfred][] workflow:
 
 ![Alfred workflow][Alfred workflow image url]
 

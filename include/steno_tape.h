@@ -18,6 +18,7 @@ static const char TAPE_FILEPATH[] =
 static const char SEPARATOR[] = "|";
 
 static const char STENO_HEADER[] = "STENO ";
+// REF: http://kaomoji.ru/en/
 static const char * const STENO_MODE_EMOJIS[] = {
   "⌨️ ｷﾀ━━━━━(ﾟ∀ﾟ)━━━━━!!⌨️ ",
   "⌨️ ☆*:.｡.o(≧▽≦)o.｡.:*☆⌨️ ",
@@ -33,6 +34,7 @@ static const int NUM_STENO_MODE_EMOJIS =
 static const char STENO_MODE_MESSAGE[] = " STENO mode activated!\n";
 
 static const char GAMING_HEADER[] = "GAMING";
+// REF: http://kaomoji.ru/en/
 static const char * const GAMING_MODE_EMOJIS[] = {
   "🎮(❁´ω`❁)　✧٩(ˊωˋ*)و✧🎮",
   "🎮 ヽ( ⌒o⌒)人(⌒-⌒ )ﾉ 🎮",
@@ -48,8 +50,8 @@ static const int NUM_GAMING_MODE_EMOJIS =
   sizeof(GAMING_MODE_EMOJIS) / sizeof(GAMING_MODE_EMOJIS[0]);
 static const char GAMING_MODE_MESSAGE[] = " GAMING mode activated!\n";
 
-// REF: http://kaomoji.ru/en/
 static const char ERROR_HEADER[] = "ERROR ";
+// REF: http://kaomoji.ru/en/
 static const char * const ERROR_EMOJIS[] = {
   "💢     ლ(ಠ_ಠ ლ)      💢",
   "💢  ( ╯°□°)╯ ┻━━┻    💢",
@@ -69,11 +71,27 @@ static const int NUM_ERROR_EMOJIS =
 static const char MODE_UNCHANGED_MESSAGE[] =
   " Attempted mode change unsuccessful!\n";
 
+static const char * const CUSTOM_ACTIONS[] = {
+  "DASH_BACKWARD",
+  "DASH_FORWARD",
+  "DASH_LEFT",
+  "DASH_RIGHT"
+};
+static const char * const CUSTOM_ACTION_TAPE_ENTRIES[] = {
+  "COMBO |     W        R B G S  | W-RBGS (D,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/db}{#RETURN}\n",
+  "COMBO |    P         R B G S  | P-RBGS (E,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/df}{#RETURN}\n",
+  "COMBO |   K          R B G S  | K-RBGS (S,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dl}{#RETURN}\n",
+  "COMBO |       R      R B G S  | R-RBGS (F,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dr}{#RETURN}\n"
+};
+static const int NUM_CUSTOM_ACTIONS =
+  sizeof(CUSTOM_ACTIONS) / sizeof(CUSTOM_ACTIONS[0]);
+
 Tape* steno_tape_init(void);
 void steno_tape_error(Tape *tape, const char *message);
 void steno_tape_gaming_mode(Tape *tape);
 void steno_tape_steno_mode(Tape *tape);
 void steno_tape_mode_unchanged(Tape *tape);
+void steno_tape_custom_entry(Tape *tape, const char *entry);
 void steno_tape_cleanup(Tape *tape);
 
 static void log_message(
@@ -92,3 +110,4 @@ static char* build_tape_entry(
   const char *emoji,
   const char *message
 );
+static void log_tape_entry(Tape *tape, const char *tape_entry);
