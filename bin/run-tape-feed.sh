@@ -9,6 +9,7 @@ readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
 readonly GOOGLE_CONSOLE_PATTERN="/links\?resource_id[^\"]+"
 readonly PLOVER_PATH_PATTERN="\\\$HOME/Library/Application Support/plover/"
 readonly GZDOOM_PATH_PATTERN="~/Documents/GZDoom/Typist/"
+readonly CLEAR_TAPE_BUFFER_PATTERN="^.+clear-tape-buffer\.scpt.+\$"
 
 main() {
   local filter=false
@@ -54,7 +55,8 @@ run_filtered_tape_feed() {
     sed -u -E "s#$URL_SCHEME_PATTERN##" |
     sed -u -E "s#$PLOVER_PATH_PATTERN##" |
     sed -u -E "s#$GZDOOM_PATH_PATTERN##" |
-    sed -u -E "s#$GOOGLE_CONSOLE_PATTERN##"
+    sed -u -E "s#$GOOGLE_CONSOLE_PATTERN##" |
+    sed -u -E "s#$CLEAR_TAPE_BUFFER_PATTERN##"
 }
 
 run_tape_feed() {
