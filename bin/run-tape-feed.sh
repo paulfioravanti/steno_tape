@@ -1,8 +1,10 @@
 #!/bin/bash
 
 readonly TAPE_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
-readonly SCPT_COMMAND_PATTERN="{:COMMAND:SHELL:bash -ci 'osascript \\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)(.*)'}(.*)\$"
-readonly SCPT_COMMAND_REPLACEMENT="{:COMMAND: \2\3}\4"
+readonly SCPT_SCRIPT_PATTERN="{:COMMAND:SHELL:bash -ci 'osascript \\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)(.*)'}(.*)\$"
+readonly SCPT_SCRIPT_REPLACEMENT="{:COMMAND: \2\3}\4"
+readonly SHELL_SCRIPT_PATTERN="{:COMMAND:SHELL:bash -ci '\\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.sh)(.*)'}(.*)\$"
+readonly SHELL_SCRIPT_REPLACEMENT="{:COMMAND: \2\3}\4"
 readonly SHELL_COMMAND_PATTERN="{:COMMAND:SHELL:bash -ci '(.+)'}\$"
 readonly SHELL_COMMAND_REPLACEMENT="{:COMMAND:SHELL: \1}"
 readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
@@ -50,7 +52,8 @@ run_filtered_tape_feed() {
   # NOTE: Unbuffered flag (-u) needed for all `sed` commands to force flush
   # their buffers otherwise no log gets output.
   tail --lines=500 -f "$TAPE_FILE" |
-    sed -u -E "s#$SCPT_COMMAND_PATTERN#$SCPT_COMMAND_REPLACEMENT#" |
+    sed -u -E "s#$SCPT_SCRIPT_PATTERN#$SCPT_SCRIPT_REPLACEMENT#" |
+    sed -u -E "s#$SHELL_SCRIPT_PATTERN#$SHELL_SCRIPT_REPLACEMENT#" |
     sed -u -E "s#$SHELL_COMMAND_PATTERN#$SHELL_COMMAND_REPLACEMENT#" |
     sed -u -E "s#$URL_SCHEME_PATTERN##" |
     sed -u -E "s#$PLOVER_PATH_PATTERN##" |
