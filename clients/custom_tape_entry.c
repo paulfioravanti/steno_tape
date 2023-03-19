@@ -1,5 +1,5 @@
 #include <steno_tape.h>    // steno_tape_cleanup, steno_tape_custom_entry,
-                           // steno_tape_init,
+                           // steno_tape_init, Tape
 
 int main(int argc, char *argv[]) {
   Tape *tape = steno_tape_init();
