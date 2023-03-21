@@ -7,7 +7,7 @@ enum {
   MAX_MESSAGE_LENGTH = 105
 };
 
-typedef struct {
+typedef struct tape {
   char *filepath;
   FILE *file;
 } Tape;
