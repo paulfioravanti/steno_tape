@@ -6,7 +6,7 @@ readonly SCRIPT_REPLACEMENT="{:COMMAND: \3\5}\6"
 readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
 readonly GOOGLE_CONSOLE_PATTERN="/links\?resource_id[^\"]+"
 readonly PLOVER_PATH_PATTERN="\\\$HOME/Library/Application Support/plover/"
-readonly GZDOOM_PATH_PATTERN="~/Documents/GZDoom/Typist/"
+readonly GZDOOM_PATH_PATTERN="\\\$HOME/Documents/GZDoom/Typist/"
 readonly CLEAR_TAPE_PATTERN="^.+clear-tape(.|\n)+"
 
 main() {
