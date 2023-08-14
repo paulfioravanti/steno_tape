@@ -64,13 +64,14 @@ The client can be run as follows:
 #### Build
 
 ```sh
-./clients/build.sh
+cd clients
+./build.sh
 ```
 
 #### Run
 
 ```sh
-./clients/custom_tape_entry <ENTRY_NAME>
+./custom_tape_entry <ENTRY_NAME>
 ```
 
 See the client code itself for what named entries are currently supported.
