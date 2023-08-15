@@ -2,11 +2,7 @@
 #include <stdlib.h>        // free, getenv, malloc, rand, srand
 #include <string.h>        // strcat, strcpy, strlen
 #include <time.h>          // time
-#include "steno_tape.h"
-
-enum {
-  MAX_MESSAGE_LENGTH = 105
-};
+#include "steno_tape.h"    // STENO_TAPE_MAX_MESSAGE_LENGTH
 
 // REF: https://github.com/rabbitgrowth/plover-tapey-tape
 static const char TAPE_FILEPATH[] =
@@ -81,6 +77,24 @@ static const char * const CUSTOM_ACTION_TAPE_ENTRIES[] = {
 };
 static const int NUM_CUSTOM_ACTIONS =
   sizeof(CUSTOM_ACTIONS) / sizeof(CUSTOM_ACTIONS[0]);
+
+static void log_message(
+  Tape *tape,
+  const char *header,
+  const char* const collection[],
+  int num_elements,
+  const char *message
+);
+static const char* get_random_collection_element(
+  const char* const collection[],
+  int num_elements
+);
+static char* build_tape_entry(
+  const char *header,
+  const char *emoji,
+  const char *message
+);
+static void log_tape_entry(Tape *tape, const char *tape_entry);
 
 Tape* steno_tape_init(void) {
   srand(time(NULL));
@@ -182,10 +196,10 @@ static char* build_tape_entry(
   const char *emoji,
   const char *message
 ) {
-  static char log_msg[MAX_MESSAGE_LENGTH];
+  static char log_msg[STENO_TAPE_MAX_MESSAGE_LENGTH];
   snprintf(
     log_msg,
-    MAX_MESSAGE_LENGTH,
+    STENO_TAPE_MAX_MESSAGE_LENGTH,
     "%s%s%s%s%s",
     header,
     SEPARATOR,
