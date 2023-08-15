@@ -7,8 +7,22 @@
 // REF: https://github.com/rabbitgrowth/plover-tapey-tape
 static const char TAPE_FILEPATH[] =
   "/Library/Application Support/plover/tapey_tape.txt";
-static const char SEPARATOR[] = "|";
+static const char * const CUSTOM_ACTIONS[] = {
+  "DASH_BACKWARD",
+  "DASH_FORWARD",
+  "DASH_LEFT",
+  "DASH_RIGHT"
+};
+static const char * const CUSTOM_ACTION_TAPE_ENTRIES[] = {
+  "COMBO |     W        R B G S  | W-RBGS (D,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/db}{#RETURN}\n",
+  "COMBO |    P         R B G S  | P-RBGS (E,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/df}{#RETURN}\n",
+  "COMBO |   K          R B G S  | K-RBGS (S,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dl}{#RETURN}\n",
+  "COMBO |       R      R B G S  | R-RBGS (F,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dr}{#RETURN}\n"
+};
+static const int NUM_CUSTOM_ACTIONS =
+  sizeof(CUSTOM_ACTIONS) / sizeof(CUSTOM_ACTIONS[0]);
 
+static const char SEPARATOR[] = "|";
 static const char STENO_HEADER[] = "STENO ";
 // REF: http://kaomoji.ru/en/
 static const char * const STENO_MODE_EMOJIS[] = {
@@ -63,20 +77,6 @@ static const int NUM_ERROR_EMOJIS =
 static const char MODE_UNCHANGED_MESSAGE[] =
   " Attempted mode change unsuccessful!\n";
 
-static const char * const CUSTOM_ACTIONS[] = {
-  "DASH_BACKWARD",
-  "DASH_FORWARD",
-  "DASH_LEFT",
-  "DASH_RIGHT"
-};
-static const char * const CUSTOM_ACTION_TAPE_ENTRIES[] = {
-  "COMBO |     W        R B G S  | W-RBGS (D,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/db}{#RETURN}\n",
-  "COMBO |    P         R B G S  | P-RBGS (E,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/df}{#RETURN}\n",
-  "COMBO |   K          R B G S  | K-RBGS (S,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dl}{#RETURN}\n",
-  "COMBO |       R      R B G S  | R-RBGS (F,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dr}{#RETURN}\n"
-};
-static const int NUM_CUSTOM_ACTIONS =
-  sizeof(CUSTOM_ACTIONS) / sizeof(CUSTOM_ACTIONS[0]);
 
 static void log_message(
   Tape *tape,
