@@ -7,20 +7,6 @@
 // REF: https://github.com/rabbitgrowth/plover-tapey-tape
 static const char TAPE_FILEPATH[] =
   "/Library/Application Support/plover/tapey_tape.txt";
-static const char * const CUSTOM_ACTIONS[] = {
-  "DASH_BACKWARD",
-  "DASH_FORWARD",
-  "DASH_LEFT",
-  "DASH_RIGHT"
-};
-static const char * const CUSTOM_ACTION_TAPE_ENTRIES[] = {
-  "COMBO |     W        R B G S  | W-RBGS (D,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/db}{#RETURN}\n",
-  "COMBO |    P         R B G S  | P-RBGS (E,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/df}{#RETURN}\n",
-  "COMBO |   K          R B G S  | K-RBGS (S,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dl}{#RETURN}\n",
-  "COMBO |       R      R B G S  | R-RBGS (F,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dr}{#RETURN}\n"
-};
-static const int NUM_CUSTOM_ACTIONS =
-  sizeof(CUSTOM_ACTIONS) / sizeof(CUSTOM_ACTIONS[0]);
 
 static const char SEPARATOR[] = "|";
 static const char STENO_HEADER[] = "STENO ";
@@ -77,8 +63,7 @@ static const int NUM_ERROR_EMOJIS =
 static const char MODE_UNCHANGED_MESSAGE[] =
   " Attempted mode change unsuccessful!\n";
 
-
-static void log_message(
+static void log_entry(
   Tape *tape,
   const char *header,
   const char* const collection[],
@@ -94,7 +79,6 @@ static char* build_tape_entry(
   const char *emoji,
   const char *message
 );
-static void log_tape_entry(Tape *tape, const char *tape_entry);
 
 Tape* steno_tape_init(void) {
   srand(time(NULL));
@@ -116,22 +100,8 @@ Tape* steno_tape_init(void) {
   return tape;
 }
 
-void steno_tape_error(Tape *tape, const char *message) {
-  log_message(tape, ERROR_HEADER, ERROR_EMOJIS, NUM_ERROR_EMOJIS, message);
-}
-
-void steno_tape_gaming_mode(Tape *tape) {
-  log_message(
-    tape,
-    GAMING_HEADER,
-    GAMING_MODE_EMOJIS,
-    NUM_GAMING_MODE_EMOJIS,
-    GAMING_MODE_MESSAGE
-  );
-}
-
-void steno_tape_steno_mode(Tape *tape) {
-  log_message(
+void steno_tape_log_steno_mode(Tape *tape) {
+  log_entry(
     tape,
     STENO_HEADER,
     STENO_MODE_EMOJIS,
@@ -140,29 +110,26 @@ void steno_tape_steno_mode(Tape *tape) {
   );
 }
 
-void steno_tape_mode_unchanged(Tape *tape) {
-  steno_tape_error(tape, MODE_UNCHANGED_MESSAGE);
+void steno_tape_log_gaming_mode(Tape *tape) {
+  log_entry(
+    tape,
+    GAMING_HEADER,
+    GAMING_MODE_EMOJIS,
+    NUM_GAMING_MODE_EMOJIS,
+    GAMING_MODE_MESSAGE
+  );
 }
 
-void steno_tape_custom_entry(Tape *tape, const char *entry) {
-  if (strcmp(entry, "GAMING_MODE") == 0) {
-    steno_tape_gaming_mode(tape);
-    return;
-  }
+void steno_tape_log_mode_unchanged(Tape *tape) {
+  steno_tape_log_error(tape, MODE_UNCHANGED_MESSAGE);
+}
 
-  if (strcmp(entry, "STENO_MODE") == 0) {
-    steno_tape_steno_mode(tape);
-    return;
-  }
+void steno_tape_log_entry(Tape *tape, const char *entry) {
+  fwrite(entry, 1, strlen(entry), tape->file);
+}
 
-  for (int i = 0; i < NUM_CUSTOM_ACTIONS; i++) {
-    if (strcmp(entry, CUSTOM_ACTIONS[i]) == 0) {
-      log_tape_entry(tape, CUSTOM_ACTION_TAPE_ENTRIES[i]);
-      return;
-    }
-  }
-
-  printf("Unknown entry: %s\n", entry);
+void steno_tape_log_error(Tape *tape, const char *entry) {
+  log_entry(tape, ERROR_HEADER, ERROR_EMOJIS, NUM_ERROR_EMOJIS, entry);
 }
 
 void steno_tape_cleanup(Tape *tape) {
@@ -171,7 +138,7 @@ void steno_tape_cleanup(Tape *tape) {
   free(tape);
 }
 
-static void log_message(
+static void log_entry(
   Tape *tape,
   const char *header,
   const char* const collection[],
@@ -179,8 +146,8 @@ static void log_message(
   const char *message
 ) {
   const char *emoji = get_random_collection_element(collection, num_elements);
-  const char *tape_entry = build_tape_entry(header, emoji, message);
-  log_tape_entry(tape, tape_entry);
+  const char *entry = build_tape_entry(header, emoji, message);
+  steno_tape_log_entry(tape, entry);
 }
 
 static const char* get_random_collection_element(
@@ -196,10 +163,10 @@ static char* build_tape_entry(
   const char *emoji,
   const char *message
 ) {
-  static char log_msg[STENO_TAPE_MAX_MESSAGE_LENGTH];
+  static char entry[STENO_TAPE_ENTRY_MAX_LENGTH];
   snprintf(
-    log_msg,
-    STENO_TAPE_MAX_MESSAGE_LENGTH,
+    entry,
+    STENO_TAPE_ENTRY_MAX_LENGTH,
     "%s%s%s%s%s",
     header,
     SEPARATOR,
@@ -207,9 +174,5 @@ static char* build_tape_entry(
     SEPARATOR,
     message
   );
-  return log_msg;
-}
-
-static void log_tape_entry(Tape *tape, const char *tape_entry) {
-  fwrite(tape_entry, 1, strlen(tape_entry), tape->file);
+  return entry;
 }

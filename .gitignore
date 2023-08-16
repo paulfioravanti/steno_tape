@@ -2,4 +2,4 @@
 *.o
 *.pc
 .DS_Store
-custom_tape_entry
+steno_tape_client
