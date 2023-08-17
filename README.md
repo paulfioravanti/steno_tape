@@ -52,14 +52,14 @@ In your C code header file, add the following:
 
 ## Custom Tape Entry Client
 
-This is just a small client that uses the `steno_tape` library to turn string
+This is just a small client that uses the `steno_tape` library to turn integer
 parameters into custom tape entries. I currently use this with
 [Alfred workflows][], where I want to output chords done in QWERTY mode
 (aka [combos][]) to the tape.
 
 ### Usage
 
-The client can be run as follows:
+The client can be used as follows:
 
 #### Build
 
@@ -71,14 +71,42 @@ cd clients
 #### Run
 
 ```sh
-./custom_tape_entry <ENTRY_NAME>
+./steno_tape_client <COMMAND_INTEGER>
 ```
 
-See the client code itself for what named entries are currently supported.
+Currently, the following commands are supported:
 
-This is how I run the program in the [Alfred][] workflow:
+```
+SWITCH_TO_STENO_MODE:  0
+SWITCH_TO_GAMING_MODE: 1
+DASH_FORWARD:          2
+DASH_BACKWARD:         3
+DASH_LEFT:             4
+DASH_RIGHT:            5
+```
+
+> "Dashing" is related to Steno Doom.
+
+So, for switching to steno mode, the command would be:
+
+```sh
+./steno_tape_client 0
+```
+
+This is how I run the program from an [Alfred][] workflow:
 
 ![Alfred workflow][Alfred workflow image url]
+
+You can see examples of the complex key combos in the Alfred workflow
+(eg `^⌥⇧⌘S`) being called in my [Georgi firmware code][] like so:
+
+```c
+SEND_STRING(
+  SS_DOWN(X_LCTRL) SS_DOWN(X_LALT) SS_DOWN(X_LSHIFT) SS_DOWN(X_LGUI)
+  SS_TAP(X_S)
+  SS_UP(X_LCTRL) SS_UP(X_LALT) SS_UP(X_LSHIFT) SS_UP(X_LGUI)
+);
+```
 
 ## Tape Filter Script
 
@@ -136,6 +164,7 @@ I want one:
 [C]: https://en.wikipedia.org/wiki/C_(programming_language)
 [combos]: https://github.com/qmk/qmk_firmware/blob/master/docs/feature_combo.md
 [commands]: https://github.com/paulfioravanti/steno-dictionaries/blob/main/dictionaries/command.md
+[Georgi firmware code]: https://github.com/paulfioravanti/qmk_keymaps/blob/master/keyboards/gboards/georgi/keymaps/paulfioravanti/user/process_record_user.c
 [Git]: https://git-scm.com/
 [GitHub]: https://github.com/
 [HIDAPI]: https://github.com/libusb/hidapi
