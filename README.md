@@ -179,6 +179,8 @@ flowchart BT
   TapeLogFile["Tape Log\n(tapey_tape.txt)"]
   TapeFilterScript["Tape Filter Script"]
 
+  classDef current fill:#ffb3b3, stroke:#333, stroke-width:4px, color:black
+
   subgraph Alfred
     direction TB
     StenoTapeCustomEntriesWorkflow
@@ -214,10 +216,11 @@ flowchart BT
 
   subgraph StenoTape["Steno Tape"]
     direction TB
-    StenoTapeLibrary
-    StenoTapeClient
-    TapeFilterScript
+    StenoTapeLibrary:::current
+    StenoTapeClient:::current
+    TapeFilterScript:::current
   end
+  class StenoTape current
 
   TapeyTape -- outputs to --> TapeLogFile
   TapeFilterScript -- filters --> TapeLogFile
