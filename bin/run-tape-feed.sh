@@ -2,7 +2,9 @@
 
 readonly TAPE_FILE="$HOME/Library/Application Support/plover/tapey_tape.txt"
 readonly SCRIPT_PATTERN="{:COMMAND:SHELL:bash -ci '(osascript )?\\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.(scpt|sh))(.*)'}(.*)\$"
-readonly SCRIPT_REPLACEMENT="{:COMMAND: \3\5}\6"
+readonly SCRIPT_REPLACEMENT="{:COMMAND:SHELL: \3\5}\6"
+readonly APPLESCRIPT_PATTERN="{:COMMAND:APPLESCRIPT:\\\$STENO_DICTIONARIES/([a-z/]+)/([a-z\-]+\.scpt)}(.*)\$"
+readonly APPLESCRIPT_REPLACEMENT="{:COMMAND:APPLESCRIPT: \2}\3"
 readonly URL_SCHEME_PATTERN="http(s)?://(www\.)?"
 readonly GOOGLE_CONSOLE_PATTERN="/links\?resource_id[^\"]+"
 readonly PLOVER_PATH_PATTERN="\\\$HOME/Library/Application Support/plover/"
@@ -49,6 +51,7 @@ run_filtered_tape_feed() {
   # their buffers otherwise no log gets output.
   tail --lines=500 -f "$TAPE_FILE" |
     sed -u -E "s#$SCRIPT_PATTERN#$SCRIPT_REPLACEMENT#" |
+    sed -u -E "s#$APPLESCRIPT_PATTERN#$APPLESCRIPT_REPLACEMENT#" |
     sed -u -E "s#$URL_SCHEME_PATTERN##" |
     sed -u -E "s#$PLOVER_PATH_PATTERN##" |
     sed -u -E "s#$GZDOOM_PATH_PATTERN##" |
