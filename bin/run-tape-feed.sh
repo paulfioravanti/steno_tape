@@ -10,13 +10,19 @@ readonly GOOGLE_CONSOLE_PATTERN="/links\?resource_id[^\"]+"
 readonly PLOVER_PATH_PATTERN="\\\$HOME/Library/Application Support/plover/"
 readonly GZDOOM_PATH_PATTERN="\\\$HOME/Documents/GZDoom/Typist/"
 readonly CLEAR_TAPE_PATTERN="^.+clear-tape(.|\n)+"
+readonly PLOVER_FORMATTING_PATTERN="({\^\^}|{MODE:RESET})"
+readonly PLOVER_NEWLINE_PATTERN="{\^~\|\\\n\^}"
+readonly PLOVER_NEWLINE_REPLACEMENT="{\^\\\n\^}"
 
 main() {
   local filter=false
+  local game=false
 
   parse_args "$@"
 
-  if [[ "$filter" = true ]]; then
+  if [[ "$filter" = true && "$game" = true ]]; then
+    run_filtered_game_tape_feed
+  elif [[ "$filter" = true ]]; then
     run_filtered_tape_feed
   else
     run_tape_feed
@@ -25,12 +31,14 @@ main() {
 
 parse_args() {
   local OPTIND opt
-  while getopts ":f-:" opt; do
+  while getopts ":fg-:" opt; do
     case $opt in
       f) filter=true;;
+      g) game=true;;
       -)
         case $OPTARG in
           filter) filter=true;;
+          game) game=true;;
           *)
             echo "Unknown option --$OPTARG"
             exit 1
@@ -57,6 +65,12 @@ run_filtered_tape_feed() {
     sed -u -E "s#$GZDOOM_PATH_PATTERN##" |
     sed -u -E "s#$GOOGLE_CONSOLE_PATTERN##" |
     sed -u -E "s#$CLEAR_TAPE_PATTERN##"
+}
+
+run_filtered_game_tape_feed() {
+  run_filtered_tape_feed |
+    sed -u -E "s#$PLOVER_FORMATTING_PATTERN##" |
+    sed -u -E "s#$PLOVER_NEWLINE_PATTERN#$PLOVER_NEWLINE_REPLACEMENT#"
 }
 
 run_tape_feed() {
