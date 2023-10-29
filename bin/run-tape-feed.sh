@@ -12,7 +12,9 @@ readonly GZDOOM_PATH_PATTERN="\\\$HOME/Documents/GZDoom/Typist/"
 readonly CLEAR_TAPE_PATTERN="^.+clear-tape(.|\n)+"
 readonly PLOVER_FORMATTING_PATTERN="({\^\^}|{MODE:RESET})"
 readonly PLOVER_NEWLINE_PATTERN="{\^~\|\\\n\^}"
-readonly PLOVER_NEWLINE_REPLACEMENT="{\^\\\n\^}"
+readonly PLOVER_NEWLINE_REPLACEMENT="\\\n"
+readonly GZDOOM_DASH_PATTERN="{\#CONTROL\(BACKSPACE\)}{\^(/d[bflr])}{\#RETURN}"
+readonly GZDOOM_DASH_REPLACEMENT="\1"
 
 main() {
   local filter=false
@@ -70,7 +72,8 @@ run_filtered_tape_feed() {
 run_filtered_game_tape_feed() {
   run_filtered_tape_feed |
     sed -u -E "s#$PLOVER_FORMATTING_PATTERN##" |
-    sed -u -E "s#$PLOVER_NEWLINE_PATTERN#$PLOVER_NEWLINE_REPLACEMENT#"
+    sed -u -E "s#$PLOVER_NEWLINE_PATTERN#$PLOVER_NEWLINE_REPLACEMENT#" |
+    sed -u -E "s#$GZDOOM_DASH_PATTERN#$GZDOOM_DASH_REPLACEMENT#"
 }
 
 run_tape_feed() {
