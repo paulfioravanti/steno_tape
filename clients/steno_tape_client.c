@@ -16,10 +16,10 @@ enum {
   DASH_RIGHT = 5
 };
 
-static const char DASH_FORWARD_ENTRY[]  = "COMBO |    P         R B G S  | P-RBGS (E,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/df}{#RETURN}\n";
-static const char DASH_BACKWARD_ENTRY[] = "COMBO |     W        R B G S  | W-RBGS (D,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/db}{#RETURN}\n";
-static const char DASH_LEFT_ENTRY[]     = "COMBO |   K          R B G S  | K-RBGS (S,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dl}{#RETURN}\n";
-static const char DASH_RIGHT_ENTRY[]    = "COMBO |       R      R B G S  | R-RBGS (F,J,K,L,;) -> {#CONTROL(BACKSPACE)}{^/dr}{#RETURN}\n";
+static const char DASH_FORWARD_ENTRY[]  = "|    P         R B G S  | P-RBGS (COMBO: EJKL;) -> /df\n";
+static const char DASH_BACKWARD_ENTRY[] = "|     W        R B G S  | W-RBGS (COMBO: DJKL;) -> /db\n";
+static const char DASH_LEFT_ENTRY[]     = "|   K          R B G S  | K-RBGS (COMBO: SJKL;) -> /dl\n";
+static const char DASH_RIGHT_ENTRY[]    = "|       R      R B G S  | R-RBGS (COMBO: FJKL;) -> /dr\n";
 
 static int parse_arguments(int argc, char *argv[]);
 

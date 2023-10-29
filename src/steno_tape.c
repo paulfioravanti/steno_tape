@@ -9,7 +9,6 @@ static const char TAPE_FILEPATH[] =
   "/Library/Application Support/plover/tapey_tape.txt";
 
 static const char SEPARATOR[] = "|";
-static const char STENO_HEADER[] = "STENO ";
 // REF: http://kaomoji.ru/en/
 static const char * const STENO_MODE_EMOJIS[] = {
   "⌨️ ｷﾀ━━━━━(ﾟ∀ﾟ)━━━━━!!⌨️ ",
@@ -25,7 +24,6 @@ static const int NUM_STENO_MODE_EMOJIS =
   sizeof(STENO_MODE_EMOJIS) / sizeof(STENO_MODE_EMOJIS[0]);
 static const char STENO_MODE_MESSAGE[] = " STENO mode activated!\n";
 
-static const char GAMING_HEADER[] = "GAMING";
 // REF: http://kaomoji.ru/en/
 static const char * const GAMING_MODE_EMOJIS[] = {
   "🎮(❁´ω`❁)　✧٩(ˊωˋ*)و✧🎮",
@@ -42,7 +40,6 @@ static const int NUM_GAMING_MODE_EMOJIS =
   sizeof(GAMING_MODE_EMOJIS) / sizeof(GAMING_MODE_EMOJIS[0]);
 static const char GAMING_MODE_MESSAGE[] = " GAMING mode activated!\n";
 
-static const char ERROR_HEADER[] = "ERROR ";
 // REF: http://kaomoji.ru/en/
 static const char * const ERROR_EMOJIS[] = {
   "💢     ლ(ಠ_ಠ ლ)      💢",
@@ -65,7 +62,6 @@ static const char MODE_UNCHANGED_MESSAGE[] =
 
 static void log_entry(
   Tape *tape,
-  const char *header,
   const char* const collection[],
   int num_elements,
   const char *message
@@ -75,7 +71,6 @@ static const char* get_random_collection_element(
   int num_elements
 );
 static char* build_tape_entry(
-  const char *header,
   const char *emoji,
   const char *message
 );
@@ -103,7 +98,6 @@ Tape* steno_tape_init(void) {
 void steno_tape_log_steno_mode(Tape *tape) {
   log_entry(
     tape,
-    STENO_HEADER,
     STENO_MODE_EMOJIS,
     NUM_STENO_MODE_EMOJIS,
     STENO_MODE_MESSAGE
@@ -113,7 +107,6 @@ void steno_tape_log_steno_mode(Tape *tape) {
 void steno_tape_log_gaming_mode(Tape *tape) {
   log_entry(
     tape,
-    GAMING_HEADER,
     GAMING_MODE_EMOJIS,
     NUM_GAMING_MODE_EMOJIS,
     GAMING_MODE_MESSAGE
@@ -129,7 +122,7 @@ void steno_tape_log_entry(Tape *tape, const char *entry) {
 }
 
 void steno_tape_log_error(Tape *tape, const char *entry) {
-  log_entry(tape, ERROR_HEADER, ERROR_EMOJIS, NUM_ERROR_EMOJIS, entry);
+  log_entry(tape, ERROR_EMOJIS, NUM_ERROR_EMOJIS, entry);
 }
 
 void steno_tape_cleanup(Tape *tape) {
@@ -140,13 +133,12 @@ void steno_tape_cleanup(Tape *tape) {
 
 static void log_entry(
   Tape *tape,
-  const char *header,
   const char* const collection[],
   int num_elements,
   const char *message
 ) {
   const char *emoji = get_random_collection_element(collection, num_elements);
-  const char *entry = build_tape_entry(header, emoji, message);
+  const char *entry = build_tape_entry(emoji, message);
   steno_tape_log_entry(tape, entry);
 }
 
@@ -159,7 +151,6 @@ static const char* get_random_collection_element(
 }
 
 static char* build_tape_entry(
-  const char *header,
   const char *emoji,
   const char *message
 ) {
@@ -167,8 +158,7 @@ static char* build_tape_entry(
   snprintf(
     entry,
     STENO_TAPE_ENTRY_MAX_LENGTH,
-    "%s%s%s%s%s",
-    header,
+    "%s%s%s%s",
     SEPARATOR,
     emoji,
     SEPARATOR,
