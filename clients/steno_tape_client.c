@@ -3,9 +3,7 @@
 #include <stdio.h>      // printf
 #include <stdlib.h>     // strtol
 #include <string.h>     // strlen
-#include <steno_tape.h> // steno_tape_cleanup, steno_tape_init,
-                        // steno_tape_log_entry, steno_tape_log_gaming_mode,
-                        // steno_tape_log_steno_mode, Tape
+#include <steno_tape.h> // Tape, steno_tape_*
 
 enum {
   SWITCH_TO_STENO_MODE = 0,
